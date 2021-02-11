@@ -1,5 +1,5 @@
 ---
 applications:
- - name: GetStartedNode
-   random-route: true
-   memory: 256M
+  - name: Demo-4595
+    random-route: true
+    memory: 256M

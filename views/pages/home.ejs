@@ -1,0 +1,69 @@
+<%- include('../tempelate/head') -%>
+<body>
+  <%- include('../tempelate/nav') -%>
+
+  <!-- hero image -->
+  <div class="bg-image">
+    <div class="bg-text text-light">
+      <h1 class="display-3">Welcome 18BCS4595</h1>
+      <p class="lead">This is Your Personal DashBoard</p>
+      <hr class="my-2" />
+      <p>Explore your account and get comfortable with surroundings 😊</p>
+      <p class="lead">
+        <a class="btn btn-danger btn-lg" href="#about" role="button"
+          >Explore <i class="fab fa-wpexplorer"></i
+        ></a>
+      </p>
+    </div>
+  </div>
+  <!-- end of hero image -->
+
+  <!-- visitorsform -->
+  <div class="container mt-2">
+    <h1>Communication Point</h1>
+    <hr>
+    <div class="row">
+      <div class="col-sm">
+        <h3 class="m-2">Leave Message For Me <i class="fas fa-sticky-note"></i></h3>
+        <%- include('../pages/visitorsform') -%>
+      </div>
+      <div class="col-sm">
+        <% if(visitors.length !== 0) {%>
+        <h3 class="m-2">Recent Visitors</h3>
+        <hr>
+          <% visitors.forEach(function(visitor){ %>
+            <div class="comment">
+              <% if(images.length !== 0) {%>
+                <img class="commentImage" src="<%= images[Math.floor(Math.random()*10 +1)].download_url %>" alt="profile">
+                <% }; %>
+              <div class="commentBody">
+                <% if(visitor.name) {%>
+                  <p class="font-weight-bold"><%= visitor.name %></p>
+                  <% }; %>
+                  <% if(visitor.name) {%>
+                    <p class="text-muted"><%= visitor.email %></p>
+                    <% }; %>
+                    <% if(visitor.comment) {%>
+                      <p ><%= visitor.comment %></p>
+                      <% }; %>
+              </div>
+            </div>
+            <hr>
+            <% }) %>
+        <% }else{ %>
+          <h1>No Visitors Yet</h1>
+          <%} %>
+      </div>
+    </div>
+    <a class="float-right" href="/visitors">see all visitors</a>
+  </div>
+
+  <!-- end of visitorsform -->
+  <%- include('../tempelate/about') -%>
+
+  <!-- footer -->
+  <footer class="card text-center text-dark bg-light" style="height: 10vh;">
+    <div class="card-footer ">&copy;2020 aky</div>
+  </footer>
+</body>
+</html>

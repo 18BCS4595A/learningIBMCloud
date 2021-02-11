@@ -1,0 +1,25 @@
+<%- include("../tempelate/head") -%>
+  <body>
+    <%- include("../tempelate/nav") -%>
+    <div class="container">
+      <h1>You Have Visitors 🎉🎉</h1>
+      <% context.forEach(function(content){ %>
+      <div class="comment">
+     
+        <img class="commentImage" src="<%= images[Math.floor(Math.random()*10 +1)].download_url %>" alt="profile">
+        <div class="commentBody">
+          <% if(content.name) {%>
+            <p class="font-weight-bold"><%= content.name %></p>
+            <% }; %>
+            <% if(content.name) {%>
+              <p class="text-muted"><%= content.email %></p>
+              <% }; %>
+              <% if(content.comment) {%>
+                <p ><%= content.comment %></p>
+                <% }; %>
+        </div>
+      </div>
+      <hr>
+        <% }); %>
+  </body>
+</html>
