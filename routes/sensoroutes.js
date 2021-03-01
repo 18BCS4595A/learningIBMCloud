@@ -20,7 +20,7 @@ router.get("/getsensordata", (req, res) => {
             new Date(body.rows[0].doc.timestamp)
               .toDateString()
               .split(" ")
-              .splice(0, 2) +
+              .splice(0, 1) +
             " " +
             new Date(body.rows[0].doc.timestamp).toLocaleTimeString("en-In");
           data.day.push(time);
