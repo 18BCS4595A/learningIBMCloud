@@ -2,4 +2,4 @@
 applications:
   - name: Demo-4595
     random-route: true
-    memory: 256M
+    memory: 128M

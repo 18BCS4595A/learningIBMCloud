@@ -1,0 +1,97 @@
+<%- include("../tempelate/head") -%>
+
+<body>
+  <%- include("../tempelate/nav") -%>
+
+  <div class="container flex justify-content-center mt-5">
+    <h3 class="text-center">
+      Following is the Data from Node red of Temperature and Humidity
+    </h3>
+    <canvas id="myChart"> </canvas>
+    <div class="m-5 float-right">
+      <a
+        href="https://demo-4595-node-red-app.eu-gb.mybluemix.net/red/#flow/1e5c7ed0.72ca41"
+        >push data from node red</a
+      >
+    </div>
+  </div>
+</body>
+<script>
+  var ctx = document.getElementById("myChart").getContext("2d");
+  const colors = {
+    green: {
+      fill: "#e0eadfdd",
+      stroke: "#5eb84d",
+    },
+    lightBlue: {
+      stroke: "#6fccdd",
+    },
+    darkBlue: {
+      fill: "#92bed2",
+      stroke: "#3282bf",
+    },
+    purple: {
+      fill: "#8fa8c888",
+      stroke: "#75539e",
+    },
+    red: {
+      stroke: "#FF0000",
+      fill: "#FF000022",
+    },
+  };
+  fetch("https://demo-4595.eu-gb.cf.appdomain.cloud/sensor/getsensordata")
+    .then((res) => res.json())
+    .then(({ data }) => {
+      var myChart = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: data.day,
+          datasets: [
+            {
+              label: "temperature",
+              fill: "+1",
+              backgroundColor: colors.red.fill,
+              pointBackgroundColor: colors.red.stroke,
+              borderColor: colors.red.stroke,
+              pointHighlightStroke: colors.red.stroke,
+              borderCapStyle: "square",
+              pointStyle: "star",
+              data: data.temperature,
+              borderWidth: 1,
+            },
+            {
+              label: "humidity",
+              fill: false,
+              backgroundColor: colors.purple.fill,
+              pointBackgroundColor: colors.purple.stroke,
+              borderColor: colors.purple.stroke,
+              pointHighlightStroke: colors.purple.stroke,
+              borderCapStyle: "square",
+              pointStyle: "triangle",
+              data: data.humidity,
+              borderWidth: 1,
+            },
+          ],
+        },
+        options: {
+          // Can't just just `stacked: true` like the docs say
+          responsive: true,
+          scales: {
+            yAxes: [
+              {
+                ticks: {
+                  beginAt: 0,
+                },
+              },
+              {
+                stacked: true,
+              },
+            ],
+          },
+          animation: {
+            duration: 750,
+          },
+        },
+      });
+    });
+</script>

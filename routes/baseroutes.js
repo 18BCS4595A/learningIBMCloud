@@ -49,6 +49,7 @@ router.get("/visitors", (req, res) => {
       req.mydb.db.list({ include_docs: true }, function (err, body) {
         if (!err) {
           body.rows.forEach(function (row) {
+            console.log(row);
             if (row.doc) data.push(row.doc);
           });
           return res.render("pages/visitors", {

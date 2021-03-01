@@ -3,6 +3,7 @@ var app = express();
 var cfenv = require("cfenv");
 var bodyParser = require("body-parser");
 var baseroutes = require("./routes/baseroutes");
+var sensoroutes = require("./routes/sensoroutes");
 
 // tempelate engine
 app.set("view engine", "ejs");
@@ -79,36 +80,66 @@ function vcapConfiguration() {
   } else if (process.env.CLOUDANT_URL) {
     cloudant = Cloudant(process.env.CLOUDANT_URL);
   }
-  if (cloudant) {
-    //database name
-    dbName = "guestbook";
+  return cloudant;
+  // if (cloudant) {
+  //   //database name
+  //   dbName = "guestbook";
 
-    // Create a new "mydb" database.
-    cloudant.db.create(dbName, function (err, data) {
-      if (!err)
-        //err if database doesn't already exists
-        console.log("Created database: " + dbName);
-    });
+  //   // Create a new "mydb" database.
+  //   cloudant.db.create(dbName, function (err, data) {
+  //     if (!err)
+  //       //err if database doesn't already exists
+  //       console.log("Created database: " + dbName);
+  //   });
 
-    // Specify the database we are going to use (mydb)...
-    mydb = cloudant.db.use(dbName);
-  }
+  //   // Specify the database we are going to use (mydb)...
+  //   mydb = cloudant.db.use(dbName);
+  // }
 }
-vcapConfiguration();
+cloudant = vcapConfiguration();
 
 //serve static file (index.html, images, css)
 app.use(express.static("./public"));
 
-app.use(
-  "/",
-  (req, res, next) => {
+// use guestbook
+
+const guestbook = function (req, res, next) {
+  console.log("inside");
+  if (cloudant) {
+    dbName = "guestbook";
+    cloudant.db.create(dbName, (err, data) => {
+      if (!err) {
+        console.log("Created database: " + dbName);
+      }
+    });
+    mydb = cloudant.db.use(dbName);
     req.mydb = {
       db: mydb,
     };
     next();
-  },
-  baseroutes
-);
+  }
+};
+
+//  use sensordata
+const sensordata = function (req, res, next) {
+  if (cloudant) {
+    dbName = "sensordata";
+    cloudant.db.create(dbName, (err, data) => {
+      if (!err) {
+        console.log("Created database: " + dbName);
+      }
+    });
+    mydb = cloudant.db.use(dbName);
+    req.mydb = {
+      db: mydb,
+    };
+    next();
+  }
+};
+
+app.use("/", guestbook, baseroutes);
+
+app.use("/sensor", sensordata, sensoroutes);
 
 var port = process.env.PORT || 3000;
 
